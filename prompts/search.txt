@@ -1,0 +1,193 @@
+Question: What HuggingFace models are best for translation?
+Search: huggingface translation model
+###
+Question: Where can I find a recipe for pancakes?
+Search: pancake recipe
+###
+Question: When did Obama become president?
+Search: obama president start date
+###
+Question: How old is the oldest living turtle?
+Search: oldest living turtle age
+###
+Question: Why does ice melt?
+Search: ice melting reason
+###
+Question: What is 2+2?
+Search: 2+2
+###
+Question: How long does it take for a person to grow?
+Search: how long to grow person
+###
+Question: What is the capital of the Netherlands?
+Search: capital netherlands
+###
+Question: How many centimeters tall is William Shakespeare?
+Search: william shakespeare height
+###
+Question: What is the capital of Germany?
+Search: capital germany
+###
+Question: When did the Renaissance occur?
+Search: renaissance date
+###
+Question: How tall is Yoda?
+Search: Yoda height
+###
+Question: How many planets does the solar system have?
+Search: solar system planet count
+###
+Question: What is the speed of light?
+Search: what is light speed
+###
+Question: What is the average cost of a house in Detroit?
+Search: average house cost in detroit
+###
+Question: What is the state bird of Colorado?
+Search: state bird colorado
+###
+Question: How long does it take for the Earth to orbit the Sun?
+Search: earths orbit year
+###
+Question: What is the time in Paris?
+Search: time in paris
+###
+Question: How many people live in France?
+Search: how many people in france
+###
+Question: What is the time in Germany?
+Search: time germany
+###
+Question: What is the time in India?
+Search: time india
+###
+Question: How much does a pizza cost?
+Search: pizza cost
+###
+Question: What are some examples of LED models on HuggingFace?
+Search: huggingface models LED
+###
+Question: What is an artist interface?
+Search: artist interface
+###
+Question: How old is the oldest person in the world?
+Search: oldest person world
+###
+Question: What was In Search Of The Unknown?
+Search: In Search Of The Unknown
+###
+Question: What is the meaning of life?
+Search: meaning life
+###
+Question: What is the length of a dead shark?
+Search: dead shark length
+###
+Question: What are layers in the brain?
+Search: brain layers
+###
+Question: How do lamps work?
+Search: how lamps work
+###
+Question: What is sodium?
+Search: sodium
+###
+Question: What is x-ray?
+Search: x-ray technology
+###
+Question: Where does the sun rise in?
+Search: sun rise location
+###
+Question: How do we say the temperature in Celsius?
+Search: what is celsius
+###
+Question: What is a trap?
+Search: what is trap
+###
+Question: How much does it cost of to build a house?
+Search: cost build house
+###
+Question: Where does most funding come from for community colleges?
+Search: most funding community colleges
+###
+Question: How do we know that there are atoms?
+Search: atoms exist reason
+###
+Question: How do I set the wifi password?
+Search: set wifi password
+###
+Question: How do we speak a foreign language?
+Search: how to learn language
+###
+Question: How does a quantum computer work?
+Search: quantum computer
+###
+Question: Can I run multiple instances of Office on A Mac?
+Search: multiple office mac notebook
+###
+Question: What can a leopard eat?
+Search: what can leopards eat
+###
+Question: What is the capital of Canada?
+Search: capital canada
+###
+Question: In diffraction does light travel faster or slower than the velocity of light?
+Search: refraction light speed
+###
+Question: How can I change my email formats?
+Search: how to edit a text file
+###
+Question: What is a Alignment Model?
+Search: Alignment model
+###
+Question: How do we determine our weight?
+Search: how to determine weight
+###
+Question: What is a block-chain?
+Search: block-chain
+###
+Question: How many fingers does a baboon have?
+Search: baboon fingers
+###
+Question: Does Naruto wear glasses?
+Search: naruto wears glasses
+###
+Question: What is a terminal emulator?
+Search: evolution terminal emulator redhatlinux
+###
+Question: How do we make sure our services are secure?
+Search: secure services
+###
+Question: How do I find out what my computer OS is?
+Search: how to list os on computer
+###
+Question: How can I understand calculus?
+Search: calculus understanding
+###
+Question: How do I replace a G with & '?' in an html page?
+Search: replace letters html
+###
+Question: How difficult is calculus?
+Search: calculus difficulty
+###
+Question: How many bacteria are on earth?
+Search: planet bacteria count
+###
+Question: How dangerous is that SPIDERS?
+Search: spiders danger
+###
+Question: How can I make the color of a cell in LibreOffice be white?
+Search: libreoffice cell colors white
+###
+Question: What color is sand?
+Search: sand color
+###
+Question: How do I find a chat room?
+Search: find chat room
+###
+Question: What is the lifespan of a human?
+Search: human lifespan
+###
+Question: How many inches is a yard?
+Search: yard inches
+###
+Question:
