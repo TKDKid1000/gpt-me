@@ -7,9 +7,12 @@ This is the order of steps for how I envision GPT-me functioning.
 
 ### Memories
 In order to replicate yourself using AI, memories are needed. In the case of GPT-me, memories would be provided in the form of summarized transcripts of past messages.
-The file `scripts/memory.py` will be used to summarize a transcript using GPT-NeoX provided by the free https://goose.ai.
-The transcript will be split into maximum token length chunks by the preprocessor, then those chunks will be summarized by GPT-Neox.
+The file `scripts/memory.py` will be used to summarize a transcript using a version of [BART](https://huggingface.co/docs/transformers/v4.28.1/en/model_doc/bart) fine tuned on the [samsum](https://huggingface.co/datasets/samsum) dataset. The fine tuned model by [philschmid](https://huggingface.co/philschmid) is found on HuggingFace at [philschmid/distilbart-cnn-12-6-samsum](https://huggingface.co/philschmid/distilbart-cnn-12-6-samsum).
+
+The transcript will be split into several line chunks by the preprocessor, then those chunks will be summarized by BART.
 This process is recursive, and will eventually only store the key details of a person in a small summary of their personality.
+
+The general recursive summary idea was mildly inherited from OpenAI's work on [Summarizing books with human feedback](https://openai.com/research/summarizing-books), but using a dedicated summary transformer instead of GPT-3.
 
 ### Chatting
 1. GPT-me receives a message from some chat app \(many adapters should exist eventually\), this can contain text, links, images, anything.
