@@ -30,5 +30,3 @@ def web_search(query: str):
         results.append(search_result)
 
     return results
-
-print(web_search("how many residents in canada in 2023"))
