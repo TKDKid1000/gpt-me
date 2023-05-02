@@ -1,13 +1,8 @@
-import json
-import time
 from dataclasses import asdict, dataclass
-from typing import Dict, List, Literal
+from typing import Literal
 
 import openai
-from openai.error import RateLimitError
-from tenacity import (
-    retry,stop_after_attempt,wait_random_exponential
-)
+from tenacity import retry, stop_after_attempt, wait_random_exponential
 
 
 @dataclass
@@ -17,9 +12,9 @@ class Message:
 
 
 class Conversation:
-    messages: List[Message] = []
+    messages: list[Message] = []
 
-    def __init__(self, messages: List[Message] = []) -> None:
+    def __init__(self, messages: list[Message] = []) -> None:
         self.messages = messages
 
     def add_message(self, message: Message):
@@ -36,7 +31,7 @@ class Conversation:
             frequency_penalty=0,
             presence_penalty=0,
         )
-        if not isinstance(response, Dict):
+        if not isinstance(response, dict):
             raise TypeError()
 
         return response
@@ -62,7 +57,7 @@ class Conversation:
             presence_penalty=0,
         )
 
-        if not isinstance(response, Dict):
+        if not isinstance(response, dict):
             raise TypeError()
 
         return response
