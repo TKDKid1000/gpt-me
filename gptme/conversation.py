@@ -1,5 +1,6 @@
-from dataclasses import asdict, dataclass
-from typing import Literal
+from dataclasses import dataclass
+from typing import Callable, Literal
+from gptme.utils.dataclass import asdict
 
 import openai
 from tenacity import retry, stop_after_attempt, wait_random_exponential
@@ -7,8 +8,11 @@ from tenacity import retry, stop_after_attempt, wait_random_exponential
 
 @dataclass
 class Message:
-    content: str
+    content: str | Callable[[], str]
     role: Literal["system", "user", "assistant"]
+
+
+AI_FLAGS = ["ai", "artificial intelligence", "language model"]
 
 
 class Conversation:

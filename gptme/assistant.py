@@ -1,18 +1,15 @@
-from dataclasses import asdict
+import json
 from datetime import date
 from typing import Sequence
 
 import torch
 
 import gptme.utils.templates as t
-from gptme.conversation import Conversation, Message
-from gptme.utils.ocr import ImageLike, image_ocr
+from gptme.conversation import AI_FLAGS, Conversation, Message
+from gptme.images.ocr import ImageLike, image_ocr
+from gptme.utils.dataclass import asdict
 from gptme.utils.summarize import get_summarization_instruct
 from gptme.utils.web_search import web_search
-
-import json
-
-AI_FLAGS = ["ai", "artificial intelligence", "language model"]
 
 
 class Assistant:
@@ -39,7 +36,7 @@ class Assistant:
         self.conversation = Conversation(
             [
                 Message(
-                    content=f"""You are a conversational and casual language bot that imitates a human as best as possible.
+                    content=lambda: f"""You are a conversational and casual language bot that imitates a human as best as possible.
                     Take on the persona of the human named {name}.
                     Do not mention that you are an AI Language Model.
                     If a request cannot be fulfilled from knowledge, respond with "Search: [message]", and a web search will be performed for you.
@@ -50,12 +47,12 @@ class Assistant:
                     Emulate {name} in first person, do not say that you are emulating them.
                     All of the you are comfortable sharing:
                     {self.personality}
-                    Attempt to continue conversations, but do not suggest helping the other person.
+                    Attempt to continue conversations, but do not overly suggest helping the other person.
                     
                     Messages will be formatted in sections.
-                    The "Image Transcriptions" section should be referenced for information.
-                    The "Memories" section should be referenced when generating your answer.
-                    The "Message" section should be your primary focus.
+                    The Images: section will contain transcribed image data.
+                    The Memories: section will contain past memories searched.
+                    The Message: section should be your primary focus and replied to.
                     
                     Current date: {date.today()}
                     """,
@@ -115,6 +112,9 @@ class Assistant:
         self.conversation.add_message(message=assistant_message)
 
         with open(".memories/conversation.json", "w") as conversation_file:
-            json.dump(list([asdict(message) for message in self.conversation.messages]), conversation_file)
+            json.dump(
+                list([asdict(message) for message in self.conversation.messages]),
+                conversation_file,
+            )
 
         return assistant_message
