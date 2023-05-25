@@ -1,5 +1,6 @@
 beautifulsoup4==4.12.2
 black==23.3.0
+discord.py-self==2.0.0 # optional, for DiscordAdapter
 gptrim==0.1.6
 openai==0.27.2
 Pillow==9.0.1
@@ -7,7 +8,7 @@ pytesseract==0.3.10
 python-dotenv==1.0.0
 requests==2.28.2
 sentence-transformers==2.2.2
-streamlit==1.22.0
+streamlit==1.22.0 # optional, for web tests/demos
 tenacity==8.2.2
 tiktoken==0.3.1
 torch==2.0.0
