@@ -1,0 +1,53 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gpt-me"
+authors = [{ name = "TKDKid1000", email = "mail@tkdkid1000.net" }]
+description = "An experiment to replicate a fully self-sufficient, human-like chatbot that imitates you using various artificial intelligence models."
+readme = "README.md"
+requires-python = ">=3.7"
+keywords = ["gpt", "ai", "chatgpt", "emulation"]
+license = { text = "MIT" }
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+]
+dependencies = [
+    "beautifulsoup4",
+    "black",
+    "gptrim",
+    "openai",
+    "Pillow",
+    "pytesseract",
+    "python-dotenv",
+    "requests",
+    "sentence-transformers",
+    "tenacity",
+    "tiktoken",
+    "torch",
+    "tqdm",
+    "transformers",
+]
+dynamic = ["version"]
+
+[project.optional-dependencies]
+scripts = ["streamlit"]
+adapters = ["discord.py-self"]
+dev = ["bumpver"]
+
+# [project.scripts]
+# my-script = "my_package.module:function"
+
+[tool.bumpver]
+current_version = "0.0.0"
+version_pattern = "MAJOR.MINOR.PATCH"
+commit_message = "bump version {old_version} -> {new_version}"
+commit = true
+tag = true
+push = false
+
+[tool.bumpver.file_patterns]
+"pyproject.toml" = ['current_version = "{version}"']
+"gptme/__init__.py" = ['__version__ = "{version}"']

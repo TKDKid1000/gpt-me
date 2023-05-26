@@ -6,11 +6,11 @@ openai==0.27.2
 Pillow==9.0.1
 pytesseract==0.3.10
 python-dotenv==1.0.0
-requests==2.28.2
+requests==2.31.0
 sentence-transformers==2.2.2
 streamlit==1.22.0 # optional, for web tests/demos
 tenacity==8.2.2
 tiktoken==0.3.1
 torch==2.0.0
 tqdm==4.65.0
-transformers==4.27.4
+transformers==4.29.2
