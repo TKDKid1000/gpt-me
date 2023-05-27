@@ -1,18 +1,20 @@
 [build-system]
-requires = ["setuptools", "setuptools-scm"]
-build-backend = "setuptools.build_meta"
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
 
 [project]
 name = "gpt-me"
 authors = [{ name = "TKDKid1000", email = "mail@tkdkid1000.net" }]
-description = "An experiment to replicate a fully self-sufficient, human-like chatbot that imitates you using various artificial intelligence models."
 readme = "README.md"
 requires-python = ">=3.7"
 keywords = ["gpt", "ai", "chatgpt", "emulation"]
 license = { text = "MIT" }
 classifiers = [
+    "Development Status :: 3 - Alpha",
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Operating System :: Unix",
 ]
 dependencies = [
     "beautifulsoup4",
@@ -30,18 +32,24 @@ dependencies = [
     "tqdm",
     "transformers",
 ]
-dynamic = ["version"]
+dynamic = ["version", "description"]
 
 [project.optional-dependencies]
 scripts = ["streamlit"]
 adapters = ["discord.py-self"]
 dev = ["bumpver"]
 
+[project.urls]
+Home = "https://github.com/TKDKid1000/gpt-me"
+
 # [project.scripts]
 # my-script = "my_package.module:function"
 
+[tool.flit.module]
+name = "gptme"
+
 [tool.bumpver]
-current_version = "0.1.0"
+current_version = "0.1.1"
 version_pattern = "MAJOR.MINOR.PATCH"
 commit_message = "bump version {old_version} -> {new_version}"
 commit = true

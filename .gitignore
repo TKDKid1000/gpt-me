@@ -4,3 +4,4 @@ messages_*.txt
 personality.txt
 .venv
 test_images
+dist
