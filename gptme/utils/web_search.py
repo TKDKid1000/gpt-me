@@ -4,6 +4,10 @@ from urllib.parse import parse_qs, quote, urlparse
 import requests
 from bs4 import BeautifulSoup
 
+import re
+from gptme.conversation import Conversation, Message
+
+
 @dataclass
 class SearchResult:
     title: str
@@ -33,13 +37,34 @@ def web_search(query: str):
 
     return results
 
+def reduce_whitespace(text: str):
+    return re.sub(r"[\s]+", ' ', text, 0)
 
-def web_summarize(url: str, question: str):
+def web_question_answer(url: str, question: str):
     html = requests.get(url, headers={"user-agent": "gpt-me/0.0.1"}).text
     soup = BeautifulSoup(html, "html.parser")
 
-    summary = soup.get_text()
+    text = reduce_whitespace(soup.get_text())
+    print(text)
 
-    # answer = flan_t5_large(f"Q: {question}\n\n{summary}")
+    summarizer = Conversation(
+        messages=[
+            Message(
+                content="""You are a web question answering tool. Answer the provided question, and include the exact paragraph from which you got the answer.
+                Respond in a format like this:
+                Answer: (your generated answer)
+                Source: (paragraph/section of text from which the answer was generated)""",
+                role="system",
+            ),
+            Message(
+                content=f"""{text}
+                
+                Question: {question}""",
+                role="user",
+            ),
+        ]
+    )
 
-    # return answer
+    response = summarizer.get_completion_chat(max_tokens=100)
+
+    return response

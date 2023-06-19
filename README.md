@@ -49,5 +49,5 @@ flowchart LR
 - [ ] Semantic memory question generation. \(ex. `"Peter hit me with a paper today."` -> `["Who is Peter?", "What happened today?"]`\)
 - [ ] Integrate web search summaries.
 - [ ] Adapter example.
-- [ ] Add image captioner.
+- [x] Add image captioner.
 - [ ] System to modify message into proper style.
