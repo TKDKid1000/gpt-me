@@ -27,12 +27,13 @@ class Assistant:
     ) -> None:
         self.personality = personality
 
-        if embeddings != None:
+        if embeddings is not None:
             self.embeddings = embeddings
 
-        if memories != None:
+        if memories is not None:
             self.memories = memories
 
+        # pylint: disable=line-too-long
         self.conversation = Conversation(
             [
                 Message(
@@ -66,16 +67,18 @@ class Assistant:
         )
 
     def send_message(
-        self, text: str, images: Sequence[ImageLike] = []
+        self, text: str, images: Sequence[ImageLike] = None
     ):  # TODO: Add small delay between receiving and responding to allow for multiple messages to be received prior to responding.
-        image_texts = [image_ocr(image) for image in images]
+        image_texts = (
+            [image_ocr(image) for image in images] if images is not None else []
+        )
 
-        message_content = t._join(
-            t._if(
+        message_content = t.join_(
+            t.if_(
                 len(image_texts) > 0,
-                t._join(
+                t.join_(
                     "\nImage Transcriptions:\n",
-                    t._for(image_texts),
+                    t.for_(image_texts),
                 ),
             ),
             "\nMessage: ",
@@ -105,15 +108,17 @@ class Assistant:
             print(f"Searching for {search_term}.")
             results = web_search(search_term)
             response = get_summarization_instruct(
-                t._for(result.snippet for result in results)
+                t.for_(result.snippet for result in results)
             )["choices"][0]["text"]
 
         assistant_message = Message(content=response, role="assistant")
         self.conversation.add_message(message=assistant_message)
 
-        with open(".memories/conversation.json", "w") as conversation_file:
+        with open(
+            ".memories/conversation.json", "w", encoding="utf8"
+        ) as conversation_file:
             json.dump(
-                list([asdict(message) for message in self.conversation.messages]),
+                list(asdict(message) for message in self.conversation.messages),
                 conversation_file,
             )
 

@@ -3,15 +3,15 @@ from typing import Iterator, Sequence
 StringRepresentable = str | int | float | bool
 
 
-def _join(*strings: StringRepresentable):
+def join_(*strings: StringRepresentable):
     return "".join(str(string) for string in strings)
 
 
-def _if(condition: bool, value: StringRepresentable, _else: StringRepresentable = ""):
+def if_(condition: bool, value: StringRepresentable, _else: StringRepresentable = ""):
     return value if condition else _else
 
 
-def _for(
+def for_(
     iterator: Iterator[StringRepresentable] | Sequence[StringRepresentable], sep="\n"
 ):
     return sep.join(list([str(value) for value in iterator]))

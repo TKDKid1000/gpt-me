@@ -1,10 +1,10 @@
-from argparse import ArgumentParser
 import os
 import pickle
+import re
 import sys
+from argparse import ArgumentParser
 from os import path
 from time import time
-import re
 
 from sentence_transformers import SentenceTransformer
 
@@ -19,21 +19,21 @@ parser.add_argument("-l", "--lines", type=int, default=3)
 
 args = parser.parse_args(sys.argv[1:])
 
-with open(args.filename) as transcript_file:
+with open(args.filename, encoding="utf8") as transcript_file:
     transcript_lines = transcript_file.readlines()
 
 
 transcript = [""]
-last_author = ""
+LAST_AUTHOR = ""
 
 for line in transcript_lines:
     author = re.match(r"^(\w+):", line)
-    if author != None and author[1] != last_author:
+    if author is not None and author[1] != LAST_AUTHOR:
         transcript.append(line)
     else:
         transcript[-1] += line
-    
-    last_author = author[1] if author != None else last_author
+
+    last_author = author[1] if author is not None else last_author
 
 transcript = ["".join(transcript[i : i + args.lines]) for i in range(0, len(transcript))]
 

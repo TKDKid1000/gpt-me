@@ -7,6 +7,8 @@ from tenacity import retry, stop_after_attempt, wait_random_exponential
 
 from gptme.utils.dataclass import asdict
 
+from gptme.utils.dataclass import asdict
+
 
 @dataclass
 class Message:
@@ -20,8 +22,8 @@ AI_FLAGS = ["ai", "artificial intelligence", "language model"]
 class Conversation:
     messages: list[Message] = []
 
-    def __init__(self, messages: list[Message] = []) -> None:
-        self.messages = messages
+    def __init__(self, messages: list[Message] = None) -> None:
+        self.messages = messages if messages is not None else []
 
     def add_message(self, message: Message):
         self.messages.append(message)

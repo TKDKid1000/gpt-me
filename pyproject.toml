@@ -37,7 +37,7 @@ dynamic = ["version", "description"]
 [project.optional-dependencies]
 scripts = ["streamlit"]
 adapters = ["discord.py-self"]
-dev = ["bumpver"]
+dev = ["bumpver", "flit", "pylint"]
 
 [project.urls]
 Home = "https://github.com/TKDKid1000/gpt-me"
