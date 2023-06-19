@@ -9,7 +9,7 @@ ImageLike = str | Image.Image | bytes
 
 def image_ocr(image: ImageLike, lang="eng") -> str:
     if isinstance(image, str):
-        response = requests.get(url=image)
+        response = requests.get(url=image, timeout=2)
         image = Image.open(BytesIO(response.content))
     elif isinstance(image, bytes):
         image = Image.open(image)

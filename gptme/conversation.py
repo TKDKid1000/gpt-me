@@ -1,9 +1,10 @@
 from dataclasses import dataclass
 from typing import Callable, Literal
-from gptme.utils.dataclass import asdict
 
 import openai
 from tenacity import retry, stop_after_attempt, wait_random_exponential
+
+from gptme.utils.dataclass import asdict
 
 
 @dataclass
@@ -18,8 +19,8 @@ AI_FLAGS = ["ai", "artificial intelligence", "language model"]
 class Conversation:
     messages: list[Message] = []
 
-    def __init__(self, messages: list[Message] = []) -> None:
-        self.messages = messages
+    def __init__(self, messages: list[Message] = None) -> None:
+        self.messages = messages if messages is not None else []
 
     def add_message(self, message: Message):
         self.messages.append(message)
@@ -28,7 +29,7 @@ class Conversation:
     def get_completion_chat(self, model="gpt-3.5-turbo"):
         response = openai.ChatCompletion.create(
             model=model,
-            messages=[asdict(message) for message in self.messages],
+            messages=list(asdict(message) for message in self.messages),
             temperature=0.7,
             max_tokens=2048,
             top_p=1,

@@ -1,4 +1,5 @@
 {
     "python.analysis.typeCheckingMode": "off",
-    "python.formatting.provider": "black"
+    "python.formatting.provider": "black",
+    "python.linting.pylintPath": "python3 -m pylint"
 }

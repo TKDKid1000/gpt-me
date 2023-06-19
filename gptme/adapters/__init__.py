@@ -1,1 +1,3 @@
-from _discord import DiscordAdapter
+from gptme.adapters._discord import DiscordAdapter
+
+__all__ = ["DiscordAdapter"]

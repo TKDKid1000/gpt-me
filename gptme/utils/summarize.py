@@ -17,7 +17,7 @@ def get_summarization_instruct(text, model="text-curie-001"):
     if not isinstance(response, dict):
         raise TypeError()
 
-    with open(".memories/summary.txt", "w") as summary_file:
+    with open(".memories/summary.txt", "w", encoding="utf8") as summary_file:
         summary_file.write(text + "\n\n" + response["choices"][0]["text"])
 
     return response
