@@ -5,3 +5,4 @@ personality.txt
 .venv
 test_images
 dist
+target

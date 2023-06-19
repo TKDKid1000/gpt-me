@@ -4,7 +4,6 @@ from urllib.parse import parse_qs, quote, urlparse
 import requests
 from bs4 import BeautifulSoup
 
-
 @dataclass
 class SearchResult:
     title: str
@@ -33,3 +32,14 @@ def web_search(query: str):
         results.append(SearchResult(title_el.get_text(), url, snippet_el.get_text()))
 
     return results
+
+
+def web_summarize(url: str, question: str):
+    html = requests.get(url, headers={"user-agent": "gpt-me/0.0.1"}).text
+    soup = BeautifulSoup(html, "html.parser")
+
+    summary = soup.get_text()
+
+    # answer = flan_t5_large(f"Q: {question}\n\n{summary}")
+
+    # return answer
