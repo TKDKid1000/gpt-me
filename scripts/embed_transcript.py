@@ -23,7 +23,7 @@ with open(args.filename, encoding="utf8") as transcript_file:
     transcript_lines = transcript_file.readlines()
 
 
-transcript = [""]
+transcript = []
 LAST_AUTHOR = ""
 
 for line in transcript_lines:
