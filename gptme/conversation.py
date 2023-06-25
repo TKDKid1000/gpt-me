@@ -1,11 +1,9 @@
 from dataclasses import dataclass
-import math
 from typing import Callable, Literal
 
 import openai
+import tiktoken
 from tenacity import retry, stop_after_attempt, wait_random_exponential
-
-from gptme.utils.dataclass import asdict
 
 from gptme.utils.dataclass import asdict
 
@@ -14,9 +12,6 @@ from gptme.utils.dataclass import asdict
 class Message:
     content: str | Callable[[], str]
     role: Literal["system", "user", "assistant"]
-
-
-AI_FLAGS = ["ai", "artificial intelligence", "language model"]
 
 
 class Conversation:
@@ -38,12 +33,11 @@ class Conversation:
         frequency_penalty=0,
         presence_penalty=0,
     ):
-        print("trying")
         response = openai.ChatCompletion.create(
             model=model,
             messages=[asdict(message) for message in self.messages],
             temperature=temperature,
-            max_tokens=max_tokens == -1 ,
+            max_tokens=None if max_tokens == -1 else max_tokens,
             top_p=top_p,
             frequency_penalty=frequency_penalty,
             presence_penalty=presence_penalty,
@@ -87,3 +81,24 @@ class Conversation:
             raise TypeError()
 
         return response
+
+    def count_tokens_chat(self, model="gpt-3.5-turbo"):
+        """Source: https://github.com/openai/openai-cookbook/blob/main/examples/How_to_count_tokens_with_tiktoken.ipynb"""
+        try:
+            tokenizer = tiktoken.encoding_for_model(model)
+        except KeyError:
+            tokenizer = tiktoken.get_encoding("cl100k_base")
+
+        tokens_per_message = 3
+        tokens_per_name = 1
+        tokens = 0
+
+        for message in self.messages:
+            tokens += tokens_per_message
+            for key, value in asdict(message).items():
+                tokens += len(tokenizer.encode(value))
+                if key == "name":
+                    tokens += tokens_per_name
+
+        tokens += 3
+        return tokens
