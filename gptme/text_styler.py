@@ -1,8 +1,8 @@
 import re
 from typing import Literal, TypedDict
 
-import gptme.utils.templates as t
 from gptme.conversation import Conversation, Message
+from gptme.utils.regex import trim_lines
 
 
 class Style(TypedDict):
@@ -30,7 +30,7 @@ class TextStyler:
         extractor = Conversation(
             [
                 Message(
-                    content=t.trim_lines(
+                    content=trim_lines(
                         """Describe the following from the sample text.
                         Do not include commentary.
                         Use options if specified.
@@ -76,12 +76,12 @@ class TextStyler:
         styler = Conversation(
             [
                 Message(
-                    content=t.join_(
-                        "Rewrite the message and use this following style:\n",
-                        t.for_(
+                    content="Rewrite the message and use this following style:\n"
+                    + "\n".join(
+                        [
                             f"{category.upper()}: {self.style[category]}"
                             for category in self.style
-                        ),
+                        ]
                     ),
                     role="system",
                 ),

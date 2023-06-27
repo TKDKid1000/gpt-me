@@ -3,13 +3,13 @@ from datetime import date
 from typing import Sequence
 
 import torch
-from gptme.utils.semantic_search import semantic_search
 
-import gptme.utils.templates as t
 from gptme.conversation import ChatFunction, Conversation, Message
 from gptme.images.ocr import ImageLike, image_ocr
 from gptme.text_styler import TextStyler
 from gptme.utils.dataclass import asdict
+from gptme.utils.regex import trim_lines
+from gptme.utils.semantic_search import semantic_search
 from gptme.utils.summarize import get_summarization_instruct
 from gptme.utils.web_search import web_search
 
@@ -48,26 +48,23 @@ class Assistant:
         self.conversation = Conversation(
             [
                 Message(
-                    content=lambda: t.trim_lines(
-                        f"""You are a conversational and casual language bot that imitates a human as best as possible.
-                    Take on the persona of the human named {name}.
-                    Please avoid making any statements that disclose that you are an AI language model. Instead, state that you are human.
-                    If something violates content limitations, politely decline without saying you are an AI.
-                    You are to behave as a human, so you will randomly generate emotions, thoughts, physical experiences, and feelings when asked those questions.
-                    Emulate {name} in first person, do not say that you are emulating them.
-                    All of the following you are comfortable sharing:
-                    {self.personality}
-                    Attempt to continue conversations, but do not overly suggest helping the other person.
-                    
-                    Messages will be formatted in sections.
-                    The Images: section will contain transcribed image data.
-                    The Memories: section will contain past memories searched.
-                    The Message: section should be your primary focus and replied to.
-                    
-                    Current date: {date.today()}
+                    content=lambda: trim_lines(
+                        f"""Take on the persona of the human named {name}
+                        Please avoid making any statements that disclose that you are an AI language model
+                        You will randomly generate emotions thoughts physical experiences and feelings when asked those questions
+                        All of the following you are comfortable sharing
+                        {self.personality}
 
-                    Use the following style for all responses:
-                    {self.text_styler.styler_message()}
+                        Attempt to continue conversations but let a conversation die naturally
+
+                        Messages will be formatted in sections
+                        Images: contains transcribed image data
+                        Message: is the content you reply to
+
+                        Today is {date.today()}
+
+                        Use the following style for all responses
+                        {self.text_styler.styler_message()}
                     """
                     ),
                     role="system",
@@ -84,13 +81,13 @@ class Assistant:
             functions=[
                 ChatFunction(
                     name="web_search",
-                    description="Perform a web search on a given query. Use this only when given information is not known, and is not personal information. Use only to find general information.",
+                    description="Perform a web search on a given query, use this only when given information is not known and is not personal information",
                     parameters={
                         "type": "object",
                         "properties": {
                             "query": {
                                 "type": "string",
-                                "description": "The search query to give the web search engine.",
+                                "description": "The web search query",
                             }
                         },
                         "required": ["query"],
@@ -98,13 +95,13 @@ class Assistant:
                 ),
                 ChatFunction(
                     name="memory_search",
-                    description="Perform a semantic memory search against a given query to return information from past messages with the user. Use this implicitly, whenever a request seems to require personal information.",
+                    description="Perform a semantic memory search against a given query to find information from past messages with the user, use this implicitly if a request seems to require personal information",
                     parameters={
                         "type": "object",
                         "properties": {
                             "query": {
                                 "type": "string",
-                                "description": "The search query to give the memory search engine.",
+                                "description": "The memory search query",
                             }
                         },
                         "required": ["query"],
@@ -119,7 +116,7 @@ class Assistant:
         print(f"Searching the web for {arguments['query']}.")
         results = web_search(query=arguments["query"])
         summary = get_summarization_instruct(
-            t.for_(result.snippet for result in results)
+            "\n".join(result.snippet for result in results)
         )["choices"][0]["text"]
         return summary
 
@@ -138,7 +135,7 @@ class Assistant:
         summarizer = Conversation(
             messages=[
                 Message(
-                    content=t.trim_lines(
+                    content=trim_lines(
                         """Summarize the content provided, and be sure to answer the question in the query.
                         Respond in the following format:
                         Key Points: {key points of the text}
@@ -157,25 +154,17 @@ class Assistant:
     def send_message(
         self, text: str, images: Sequence[ImageLike] = None
     ):  # TODO: Add small delay between receiving and responding to allow for multiple messages to be received prior to responding.
-        image_texts = (
-            [image_ocr(image) for image in images] if images is not None else []
+        image_transcriptions = (
+            "Image Transcriptions:\n"
+            + "\n".join([image_ocr(image) for image in images])
+            + "\n"
+            if images is not None
+            else ""
         )
 
-        message_content = t.join_(
-            t.if_(
-                len(image_texts) > 0,
-                t.join_(
-                    "\nImage Transcriptions:\n",
-                    t.for_(image_texts),
-                ),
-            ),
-            "\nMessage: ",
-            text,
-        )
+        message_content = image_transcriptions + "Message: " + text
+
         print(f"--- Inputted Message ---\n{message_content}\n###")
-
-        # TODO: Integrate message transcript semantic search system to determine what memories to search up – if any.
-        # TODO: Integrate web search system if common information is unknown.
 
         self.conversation.add_message(
             message=Message(content=message_content, role="user")
