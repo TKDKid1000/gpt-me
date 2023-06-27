@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Callable, Literal
+from typing import Callable, Literal, Optional
 
 import openai
 import tiktoken
@@ -11,7 +11,16 @@ from gptme.utils.dataclass import asdict
 @dataclass
 class Message:
     content: str | Callable[[], str]
-    role: Literal["system", "user", "assistant"]
+    role: Literal["system", "user", "assistant", "function"]
+    name: Optional[str] = None
+    function_call: Optional[object] = None
+
+
+@dataclass
+class ChatFunction:
+    name: str
+    description: str
+    parameters: object
 
 
 class Conversation:
@@ -23,40 +32,47 @@ class Conversation:
     def add_message(self, message: Message):
         self.messages.append(message)
 
-    @retry(wait=wait_random_exponential(min=1, max=60), stop=stop_after_attempt(9))
+    @retry(wait=wait_random_exponential(min=1, max=120), stop=stop_after_attempt(10))
     def get_completion_chat(
         self,
         model="gpt-3.5-turbo",
         temperature=0.7,
         max_tokens=-1,
         top_p=1,
-        frequency_penalty=0,
-        presence_penalty=0,
+        frequency_penalty=0.0,
+        presence_penalty=0.0,
+        functions: list[ChatFunction] = None,
+        function_call: str | object = "auto",
     ):
-        response = openai.ChatCompletion.create(
-            model=model,
-            messages=[asdict(message) for message in self.messages],
-            temperature=temperature,
-            max_tokens=None if max_tokens == -1 else max_tokens,
-            top_p=top_p,
-            frequency_penalty=frequency_penalty,
-            presence_penalty=presence_penalty,
-        )
-        print(response)
+        arguments = {
+            "model": model,
+            "messages": [asdict(message) for message in self.messages],
+            "temperature": temperature,
+            "max_tokens": None if max_tokens == -1 else max_tokens,
+            "top_p": top_p,
+            "frequency_penalty": frequency_penalty,
+            "presence_penalty": presence_penalty,
+        }
+
+        if functions is not None and len(functions) > 0:
+            arguments["functions"] = [asdict(function) for function in functions]
+            arguments["function_call"] = function_call
+
+        response = openai.ChatCompletion.create(**arguments)
         if not isinstance(response, dict):
             raise TypeError()
 
         return response
 
-    @retry(wait=wait_random_exponential(min=1, max=60), stop=stop_after_attempt(9))
+    @retry(wait=wait_random_exponential(min=1, max=120), stop=stop_after_attempt(10))
     def get_completion_instruct(
         self,
         model="text-curie-001",
         temperature=0.7,
         max_tokens=1024,
         top_p=1,
-        frequency_penalty=0,
-        presence_penalty=0,
+        frequency_penalty=0.0,
+        presence_penalty=0.0,
     ):
         response = openai.Completion.create(
             model=model,

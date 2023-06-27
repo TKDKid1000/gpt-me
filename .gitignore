@@ -6,3 +6,4 @@ personality.txt
 test_images
 dist
 target
+.styles*

@@ -6,10 +6,10 @@ from gptme.assistant import Assistant
 
 class DiscordAdapter(discord.Client):
     assistant: Assistant
-    channel_id: str
+    channel_id: int
     cooldown: int
 
-    def __init__(self, assistant: Assistant, channel_id: str) -> None:
+    def __init__(self, assistant: Assistant, channel_id: int) -> None:
         super().__init__()
         self.assistant = assistant
         self.channel_id = channel_id

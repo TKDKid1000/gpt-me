@@ -4,7 +4,7 @@ from sentence_transformers.util import cos_sim
 from gptme.models import msmarco_distilbert_base_v4
 
 
-def semantic_search(query, embeddings, transcript, top_k=5):
+def semantic_search(query: str, embeddings, transcript, top_k=5):
     top_k = min(top_k, len(transcript))
 
     query_embedding = msmarco_distilbert_base_v4.encode(query, convert_to_tensor=True)

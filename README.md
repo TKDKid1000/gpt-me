@@ -42,12 +42,13 @@ flowchart LR
     %% OCR --> Sem
     Links --> Web
     Sem & Captioner & Web & OCR & Text --> ChatGPT
-    ChatGPT --> Output["Adapter Output"]
+    ChatGPT --> Styler["Text Styler"] --> Output["Adapter Output"]
 ```
 
 ## Todo
+
 - [ ] Semantic memory question generation. \(ex. `"Peter hit me with a paper today."` -> `["Who is Peter?", "What happened today?"]`\)
-- [ ] Integrate web search summaries.
-- [ ] Adapter example.
+- [x] Integrate web search summaries.
+- [x] Adapter example.
 - [x] Add image captioner.
-- [ ] System to modify message into proper style.
+- [x] System to modify message into proper style.

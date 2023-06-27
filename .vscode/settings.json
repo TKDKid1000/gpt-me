@@ -1,5 +1,6 @@
 {
     "python.analysis.typeCheckingMode": "off",
     "python.formatting.provider": "black",
-    "python.defaultInterpreterPath": ".venv/bin/python"
+    "python.defaultInterpreterPath": ".venv/bin/python",
+    "python.linting.pylintArgs": ["--disable=E0015"]
 }
