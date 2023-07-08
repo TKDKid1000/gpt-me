@@ -1,9 +1,12 @@
 .env
 .memories*
-messages_*.txt
+messages*
 personality.txt
 .venv
 test_images
 dist
 target
 .styles*
+transcript.txt
+save-dms*
+**/__pycache__/
