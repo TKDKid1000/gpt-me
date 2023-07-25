@@ -57,7 +57,7 @@ class Assistant:
 
                         Attempt to continue conversations but let a conversation die naturally
 
-                        Messages will be formatted in sections
+                        Message inputs will be formatted in sections
                         Images: contains transcribed image data
                         Message: is the content you reply to
 
@@ -154,11 +154,13 @@ class Assistant:
     def send_message(
         self, text: str, images: Sequence[ImageLike] = None
     ):  # TODO: Add small delay between receiving and responding to allow for multiple messages to be received prior to responding.
+        if images is None:
+            images = []
         image_transcriptions = (
             "Image Transcriptions:\n"
             + "\n".join([image_ocr(image) for image in images])
             + "\n"
-            if images is not None
+            if len(images) > 0
             else ""
         )
 

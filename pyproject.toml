@@ -6,7 +6,7 @@ build-backend = "flit_core.buildapi"
 name = "gpt-me"
 authors = [{ name = "TKDKid1000", email = "mail@tkdkid1000.net" }]
 readme = "README.md"
-requires-python = ">=3.7"
+requires-python = ">=3.11"
 keywords = ["gpt", "ai", "chatgpt", "emulation"]
 license = { text = "MIT" }
 classifiers = [
@@ -19,7 +19,9 @@ classifiers = [
 dependencies = [
     "beautifulsoup4",
     "black",
+    "cohere",
     "gptrim",
+    "nltk",
     "openai",
     "Pillow",
     "pytesseract",

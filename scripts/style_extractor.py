@@ -47,18 +47,15 @@ transcript = [line.strip() for line in transcript if len(line) >= ARGS.min_lengt
 
 seed(ARGS.seed)
 
-message_sample = sample(transcript, ARGS.samples)
-
-for sample in message_sample:
-    print(sample)
+message_samples = sample(transcript, ARGS.samples)
 
 text_styler = TextStyler()
 
-style = text_styler.extract_style("\n".join(message_sample))
+text_styler.extract_style(message_samples)
 
-print(style)
+print(text_styler.style)
 
-style_json = {"style": style, "seed": ARGS.seed, "messages": message_sample}
+style_json = {"style": text_styler.style, "seed": ARGS.seed, "messages": message_samples}
 
 output_path = f".styles/{time()}/{path.split(ARGS.filename)[1]}.json"
 

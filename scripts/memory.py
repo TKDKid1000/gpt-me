@@ -15,38 +15,33 @@ MAX_TOKENS_SUMMARY = 16000
 MAX_SIZE_MEMORY = 1600
 
 
-def summarize_memory(memory_lines: List[str], section_length=20, levels=1, gptrim=True):
+def summarize_memory(memory_lines: List[str], section_length=20, gptrim=True):
     source = memory_lines
 
-    for level in range(levels):
-        print(f"Beginning summary for level: {level}")
-        section_summary = []
-        for section in tqdm(range(0, len(source), section_length), desc=f"Level {level}"):
-            source_text = "\n".join(
-                source[section : min(section + section_length, len(source))]
+    for section in tqdm(range(0, len(source), section_length)):
+        source_text = "\n".join(
+            source[section : min(section + section_length, len(source))]
+        )
+        try:
+            summary = summarizer(
+                source_text,
+                do_sample=False,
             )
-            try:
-                summary = summarizer(
-                    source_text,
-                    max_length=128,
-                    min_length=32,
-                    do_sample=False,
-                )
-            except IndexError: # should only trim the messages if vital for summary
-                summary = summarizer(
-                    trim(source_text, remove_spaces=False, remove_punctuation=True),
-                    max_length=128,
-                    min_length=32,
-                    do_sample=False,
-                )
-            section_summary.append(summary[0]["summary_text"])  # type: ignore
-        source = section_summary
+        except IndexError:  # should only trim the messages if vital for summary
+            summary = summarizer(
+                trim(source_text, remove_spaces=False, remove_punctuation=True),
+                do_sample=False,
+            )
 
-    return (
-        trim("\n".join(source), remove_spaces=False, remove_punctuation=True)
-        if gptrim
-        else "\n".join(source)
-    )
+        yield (
+            trim(
+                summary[0]["summary_text"],
+                remove_spaces=False,
+                remove_punctuation=True,
+            )
+            if gptrim
+            else summary[0]["summary_text"]
+        )
 
     # return summarizer(memory_text, max_length=250, min_length=50, do_sample=False)[0]["summary_text"] # type: ignore
     # tokens = tokenizer(memory_text, max_length=MAX_TOKENS_SUMMARY, return_tensors="pt", truncation=True)
@@ -83,7 +78,6 @@ parser = ArgumentParser(
 )
 parser.add_argument("filename")
 parser.add_argument("-s", "--section_length", type=int, default=20)
-parser.add_argument("-l", "--levels", type=int, default=1)
 parser.add_argument("-t", "--trim", action="store_true", default=False)
 
 args = parser.parse_args(sys.argv[1:])
@@ -93,15 +87,13 @@ output_path = f".memories/{time()}/{path.split(args.filename)[1]}"
 
 os.makedirs(path.dirname(output_path), exist_ok=True)
 
-with open(args.filename) as f:
+with open(args.filename, encoding="utf8") as f:
     memories_text = f.readlines()
 
-with open(output_path, "w") as f:
-    f.write(
-        summarize_memory(
-            memories_text,
-            section_length=args.section_length,
-            levels=args.levels,
-            gptrim=args.trim,
-        )
-    )
+for section_summary in summarize_memory(
+    memories_text,
+    section_length=args.section_length,
+    gptrim=args.trim,
+):
+    with open(output_path, "a", encoding="utf8") as f:
+        f.write(section_summary + "\n")

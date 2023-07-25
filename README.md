@@ -45,10 +45,31 @@ flowchart LR
     ChatGPT --> Styler["Text Styler"] --> Output["Adapter Output"]
 ```
 
+## Styling
+
+_Tl;dr This turned out to be a lot more difficult than I thought it would be._
+
+Initially, styling seemed as easy as just throwing a sample of a user's text into ChatGPT, then having it return a description. This did not work, because if it did, the whole styling section wouldn't be a thing. Text styling is complicated to say the least. So far, I have broken it down into several smaller sub-categories. Some implemented by LLMs, others by old fashioned text processing.
+
+1. Punctuation - This falls down to sentence endings (people use more than just periods in texting), proper capitalization, and commas. All of this can be calculated using basic NLTK text processing. Different punctuation for different types of sentences is also determined for clarity.
+2. Contractions - Here, all text contractions are evaluated into percentages: Expanded, proper, and improper. When styling, all contractions are selected over and then randomly transformed based on weighted randoms.
+3. Diction - According to [this Grammarly article](https://www.grammarly.com/blog/diction-in-writing/), there are nine types of diction in writing: Formal, informal, pedantic, pedestrian, slang, colloquial, abstract, concrete, and poetic. To find diction, one can throw a sample of text into a classification model such as [roberta-large-mnli](https://huggingface.co/roberta-large-mnli).
+4. Length - Everyone has different texting lengths, but instead of finding out different lengths for sentence types, it's easier to just average the word and sentence lengths of a large sample of messages. From here, ask an LLM to rewrite a message using those lengths.
+5. Emojis - Purely a word to emoji ratio. Nothing more to say.
+6. Mood - A five word description of the texts mood, as determined by [Cohere's Command model](https://docs.cohere.com/docs/models#command).
+7. Abbreviations - Just a texting thing, but many texters these days use abbreviations for *many* words. To collect abbreviation usage information, all that is needed is a dataset of common abbreviations. From there, the process is just like contractions.
+
+To apply all of these, the extraction process can essentially be reversed. First, transform the sentence using an LLM. (In this case, Cohere's Command.) These transformations include diction, mood, and length. Just plug those into the prompt and out pops a stylistically transformed sentence. Applying punctuation and grammar is as simple as scanning over the sentences and applying the desired edits. Change out sentence endings probabilistically, give certain sentences proper capitalization, etc. For contractions and abbreviations, just randomly search the sentence for the desired key and then probabilistically swap it out for a contraction or an abbreviation. Adding emojis can be done by simply swapping out random words for their corresponding emojis.
+
+## Sources
+
+Contractions dataset: https://www.kaggle.com/datasets/ishivinal/contractions
+Texting acronyms data: https://www.yourdictionary.com/articles/texting-acronyms
+
 ## Todo
 
 - [ ] Semantic memory question generation. \(ex. `"Peter hit me with a paper today."` -> `["Who is Peter?", "What happened today?"]`\)
 - [x] Integrate web search summaries.
 - [x] Adapter example.
 - [x] Add image captioner.
-- [x] System to modify message into proper style.
+- [ ] System to modify message into proper style.

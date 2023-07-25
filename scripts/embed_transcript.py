@@ -24,11 +24,11 @@ with open(args.filename, encoding="utf8") as transcript_file:
 
 
 transcript = []
-LAST_AUTHOR = ""
+last_author = ""
 
 for line in transcript_lines:
     author = re.match(r"^(\w+):", line)
-    if author is not None and author[1] != LAST_AUTHOR:
+    if author is not None and author[1] != last_author:
         transcript.append(line)
     else:
         transcript[-1] += line
